@@ -8,22 +8,91 @@ date: "2024-11-10"
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+```{r}
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+library(astsa)
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+
+
+```{r}
+
+yearTemp <- read.csv("Yearly.csv")
+
+YearlyTemp <- yearTemp %>%
+  filter(Year <= 2023, Source == "gcag")
+
+ 
+temp_TS <- YearlyTemp[, c("Year", "Mean")]
+temp_TS <- temp_TS[order(temp_TS$Year), ]
+temp_TS <- ts(temp_TS$Mean, 
+                   start = min(temp_TS$Year), 
+                   end = max(temp_TS$Year), 
+                   frequency = 1)
+
+
+
+co2Data <- read.csv("https://ourworldindata.org/grapher/annual-co2-emissions-per-country.csv?v=1&csvType=filtered&useColumnShortNames=false&country=~OWID_WRL")
+co2Data <- co2Data[co2Data$Year >= 1850, ]
+c02_TS <- co2Data[, c("Year", "Annual.CO..emissions")]
+c02_TS <- c02_TS[order(c02_TS$Year), ]
+c02_TS <- ts(c02_TS$Annual.CO..emissions, 
+                   start = min(c02_TS$Year), 
+                   end = max(c02_TS$Year), 
+                   frequency = 1)
+
+
+
+plot(c02_TS)
+
+plot(log(c02_TS))
+
+
+plot(diff(log(c02_TS)))
+
+acf2(diff(log(c02_TS)))
+
+
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r}
+
+Temp_model <- lm(Year~value, data = co2Data)
+summary(Temp_model)
+plot(resid(Temp_model), type = "l")
+
+acf(diff(log(abs(resid(Temp_model)))))
+pacf(diff(log(abs(resid(Temp_model)))))
+
+
+```
+
+
+
+```{r}
+
+
+
+
+
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
