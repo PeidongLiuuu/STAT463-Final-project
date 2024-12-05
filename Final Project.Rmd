@@ -5,7 +5,12 @@ date: "2024-11-12"
 output: 
   pdf_document:
     latex_engine: xelatex
+urlcolor: blue
+geometry: left=1in,right=1in,top=1in,bottom=1in
 bibliography: My first project.bib
+header-includes:
+  - \usepackage{subfig}
+  - \usepackage{float}
 ---
 
 ```{r setup, include=FALSE}
@@ -93,6 +98,7 @@ The Intergovernmental Panel on Climate Change (IPCC) issued a report in 1990 uti
 Anthropological contribution on the emission of carbon dioxide that mainly draws from the effect of human activity [3] on a large scale acts as the main motive of the extreme spur especially after the second industrial revolution era.[2] Predominantly starts from western europe and north america where both regions exceeded 10 ton per capita as from the region report [@ritchie_2023_co]. A combination of boost in different industries which is facilitated by the second industrial revolution including chemical and transportation domain [4] after the mid 1880s followed by the expansion boom leads to the official start of boosting the aggregate global carbon dioxide emission. This major event placed a major factor on the $co_2$ emission which reflected on the overall data trend in terms of human intervention. 
 
 
+
 # Method
 
 In this study, we determine the effect of $co_2$ on temperature and compare the trend found through constructing a time series model for forecasting and the Arch-Garch method for taking care of the variance change aspect as time progresses. We use linear regression and Auto-Aggressive-Moving-Average(ARIMA) models for stationary and stochastic respectively. The model takes in consideration the data behavior change due to real world events. 
@@ -102,6 +108,14 @@ In this study, we determine the effect of $co_2$ on temperature and compare the 
 
 
 ```{r}
+#| fig.cap = "Outlier Dection",
+#| fig.subcap = c("Univariate outlier detection for Co-variate", "Univariate outlier detection for Response","Multivariate Boxplot Outlier Dection"),
+#| fig.ncol = 2,
+#| out.width = "50%",
+#| fig.pos = "H",
+#| fig.show = "hold"
+
+
 plot(dat[,1])
 plot(dat[,2])
 
