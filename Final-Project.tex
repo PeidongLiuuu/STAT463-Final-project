@@ -1,0 +1,658 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newlength{\cslentryspacingunit} % times entry-spacing
+\setlength{\cslentryspacingunit}{\parskip}
+\newenvironment{CSLReferences}[2] % #1 hanging-ident, #2 entry spacing
+ {% don't indent paragraphs
+  \setlength{\parindent}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+  \let\oldpar\par
+  \def\par{\hangindent=\cslhangindent\oldpar}
+  \fi
+  % set entry spacing
+  \setlength{\parskip}{#2\cslentryspacingunit}
+ }%
+ {}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{#1\hfill\break}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{#1}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{#1}\break}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Stat 463 Final Project},
+  pdfauthor={Gustav Vu},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Stat 463 Final Project}
+\author{Gustav Vu}
+\date{2024-11-12}
+
+\begin{document}
+\maketitle
+
+Load Libraries
+
+Load Data
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Fetch the data}
+\NormalTok{co2Data }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"https://ourworldindata.org/grapher/annual{-}co2{-}emissions{-}per{-}country.csv?v=1\&csvType=filtered\&useColumnShortNames=false\&country=\textasciitilde{}OWID\_WRL"}\NormalTok{)}
+
+
+\NormalTok{YearlyTemp }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"Yearly.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{clean-data}{%
+\section{Clean Data}\label{clean-data}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{YearlyTemp }\OtherTok{\textless{}{-}}\NormalTok{ YearlyTemp[YearlyTemp}\SpecialCharTok{$}\NormalTok{Source }\SpecialCharTok{==} \StringTok{"gcag"}\NormalTok{, ] }\CommentTok{\# keep source constant.}
+\NormalTok{c02\_TS }\OtherTok{\textless{}{-}}\NormalTok{ co2Data[, }\FunctionTok{c}\NormalTok{(}\StringTok{"Year"}\NormalTok{, }\StringTok{"Annual.CO..emissions"}\NormalTok{)]}
+\NormalTok{c02\_TS }\OtherTok{\textless{}{-}}\NormalTok{ c02\_TS[}\FunctionTok{order}\NormalTok{(c02\_TS}\SpecialCharTok{$}\NormalTok{Year), ]}
+\NormalTok{c02\_TS }\OtherTok{\textless{}{-}} \FunctionTok{ts}\NormalTok{(c02\_TS}\SpecialCharTok{$}\NormalTok{Annual.CO..emissions, }
+                   \AttributeTok{start =} \FunctionTok{min}\NormalTok{(c02\_TS}\SpecialCharTok{$}\NormalTok{Year), }
+                   \AttributeTok{end =} \FunctionTok{max}\NormalTok{(c02\_TS}\SpecialCharTok{$}\NormalTok{Year), }
+                   \AttributeTok{frequency =} \DecValTok{1}\NormalTok{)}
+
+\NormalTok{temp\_TS }\OtherTok{\textless{}{-}}\NormalTok{ YearlyTemp[, }\FunctionTok{c}\NormalTok{(}\StringTok{"Year"}\NormalTok{, }\StringTok{"Mean"}\NormalTok{)]}
+\NormalTok{temp\_TS }\OtherTok{\textless{}{-}}\NormalTok{ temp\_TS[}\FunctionTok{order}\NormalTok{(temp\_TS}\SpecialCharTok{$}\NormalTok{Year), ]}
+\NormalTok{temp\_TS }\OtherTok{\textless{}{-}} \FunctionTok{ts}\NormalTok{(temp\_TS}\SpecialCharTok{$}\NormalTok{Mean, }
+                   \AttributeTok{start =} \FunctionTok{min}\NormalTok{(temp\_TS}\SpecialCharTok{$}\NormalTok{Year), }
+                   \AttributeTok{end =} \FunctionTok{max}\NormalTok{(temp\_TS}\SpecialCharTok{$}\NormalTok{Year), }
+                   \AttributeTok{frequency =} \DecValTok{1}\NormalTok{)}
+
+\NormalTok{dat }\OtherTok{\textless{}{-}} \FunctionTok{ts.intersect}\NormalTok{(c02\_TS, temp\_TS)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{introduction}{%
+\section{Introduction}\label{introduction}}
+
+For decades, the scientific community, policymakers, and global
+organizations have been grappling with the pressing issue of global
+warming, aiming to identify, develop, and implement the most effective
+strategies to mitigate its effects. One of the most critical steps in
+addressing this challenge is to thoroughly investigate its underlying
+causes, particularly the factors contributing to the increased
+concentration of carbon dioxide (\(co_2\)) in the atmosphere. As a
+primary greenhouse gas, \(co_2\) plays a pivotal role in the
+intensification of the greenhouse effect, which has directly and
+indirectly led to a steady rise in global average temperatures.
+Understanding the historical trends and sources of \(co_2\) emissions is
+crucial to comprehending the broader dynamics of climate change.
+
+This research specifically focuses on analyzing the significant boom in
+\(co_2\) emissions that occurred during the Second Industrial
+Revolution, a period marked by rapid industrialization, technological
+advancements, and fossil fuel exploitation. By evaluating the
+socio-economic activities and technological developments of this
+transformative era, we aim to uncover the extent to which these factors
+contributed to the expansion of greenhouse gas levels and how they set
+the stage for the modern challenges of global warming. Through this
+analysis, we hope to provide insights into historical emission trends
+and their implications for current and future efforts to combat climate
+change.
+
+\hypertarget{background}{%
+\section{Background}\label{background}}
+
+\hypertarget{global-warming-common-issue}{%
+\subsubsection{Global warming common
+issue}\label{global-warming-common-issue}}
+
+The Intergovernmental Panel on Climate Change (IPCC) issued a report in
+1990 utilizing global mean near surface temperature which raised concern
+on the rate of increasing. {[}5{]}. This concern raised the question of
+further research on greenhouse effect of the
+
+Anthropological contribution on the emission of carbon dioxide that
+mainly draws from the effect of human activity {[}3{]} on a large scale
+acts as the main motive of the extreme spur especially after the second
+industrial revolution era.{[}2{]} Predominantly starts from western
+europe and north america where both regions exceeded 10 ton per capita
+as from the region report (Ritchie, Rosado, and Roser 2023). A
+combination of boost in different industries which is facilitated by the
+second industrial revolution including chemical and transportation
+domain {[}4{]} after the mid 1880s followed by the expansion boom leads
+to the official start of boosting the aggregate global carbon dioxide
+emission. This major event placed a major factor on the \(co_2\)
+emission which reflected on the overall data trend in terms of human
+intervention.
+
+\hypertarget{method}{%
+\section{Method}\label{method}}
+
+In this study, we determine the effect of \(co_2\) on temperature and
+compare the trend found through constructing a time series model for
+forecasting and the Arch-Garch method for taking care of the variance
+change aspect as time progresses. We use linear regression and
+Auto-Aggressive-Moving-Average(ARIMA) models for stationary and
+stochastic respectively. The model takes in consideration the data
+behavior change due to real world events.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(dat[,}\DecValTok{1}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Final-Project_files/figure-latex/unnamed-chunk-4-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(dat[,}\DecValTok{2}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Final-Project_files/figure-latex/unnamed-chunk-4-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{acf2}\NormalTok{(}\FunctionTok{diff}\NormalTok{(}\FunctionTok{log}\NormalTok{(dat[,}\DecValTok{1}\NormalTok{])))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Final-Project_files/figure-latex/unnamed-chunk-4-3.pdf}
+
+\begin{verbatim}
+##       [,1]  [,2] [,3] [,4]  [,5] [,6] [,7]  [,8]  [,9] [,10] [,11] [,12] [,13]
+## ACF  -0.02 -0.04 0.04 0.11 -0.08    0 0.26 -0.05 -0.07  0.06  0.14 -0.01  0.22
+## PACF -0.02 -0.04 0.04 0.11 -0.07    0 0.25 -0.05 -0.04  0.04  0.09  0.04  0.25
+##      [,14] [,15] [,16] [,17] [,18] [,19] [,20] [,21] [,22] [,23] [,24]
+## ACF    0.0 -0.03  0.02  0.18 -0.06  0.05 -0.02 -0.03 -0.08  0.05  0.08
+## PACF  -0.1 -0.01  0.06  0.13 -0.10  0.09 -0.18 -0.01 -0.04  0.01 -0.06
+\end{verbatim}
+
+\hypertarget{model-deterministic-part.}{%
+\section{Model Deterministic Part.}\label{model-deterministic-part.}}
+
+Looking at our plot It seems as if events occurred around 1950, and 1900
+start of second industrial revolution and end of World War II.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(dat[,}\DecValTok{2}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Final-Project_files/figure-latex/unnamed-chunk-5-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Afterww2 }\OtherTok{\textless{}{-}} \FunctionTok{as.numeric}\NormalTok{(}\FunctionTok{time}\NormalTok{(dat)}\SpecialCharTok{\textgreater{}=} \DecValTok{1945}\NormalTok{)}
+\NormalTok{IndustryRev }\OtherTok{\textless{}{-}} \FunctionTok{as.numeric}\NormalTok{(}\FunctionTok{time}\NormalTok{(dat)}\SpecialCharTok{\textgreater{}=} \DecValTok{1900}\NormalTok{)}
+\NormalTok{I1976 }\OtherTok{\textless{}{-}} \FunctionTok{as.numeric}\NormalTok{(}\FunctionTok{time}\NormalTok{(dat)}\SpecialCharTok{\textgreater{}=} \DecValTok{1976}\NormalTok{)}
+
+\NormalTok{model2 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(dat[,}\DecValTok{2}\NormalTok{] }\SpecialCharTok{\textasciitilde{}} \FunctionTok{time}\NormalTok{(dat)}\SpecialCharTok{+}\FunctionTok{time}\NormalTok{(dat)}\SpecialCharTok{*}\NormalTok{Afterww2}\SpecialCharTok{+} \FunctionTok{time}\NormalTok{(dat)}\SpecialCharTok{*}\NormalTok{IndustryRev, }\AttributeTok{data =}\NormalTok{ dat)}
+\CommentTok{\#plot(model2)}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{2}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(model2, }\AttributeTok{whixh =} \DecValTok{1}\SpecialCharTok{:}\DecValTok{4}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in plot.window(...): "whixh" is not a graphical parameter
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in plot.xy(xy, type, ...): "whixh" is not a graphical parameter
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in axis(side = side, at = at, labels = labels, ...): "whixh" is not a
+## graphical parameter
+
+## Warning in axis(side = side, at = at, labels = labels, ...): "whixh" is not a
+## graphical parameter
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in box(...): "whixh" is not a graphical parameter
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): "whixh" is not a graphical parameter
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in plot.xy(xy.coords(x, y), type = type, ...): "whixh" is not a
+## graphical parameter
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in plot.window(...): "whixh" is not a graphical parameter
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in plot.xy(xy, type, ...): "whixh" is not a graphical parameter
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in axis(side = side, at = at, labels = labels, ...): "whixh" is not a
+## graphical parameter
+
+## Warning in axis(side = side, at = at, labels = labels, ...): "whixh" is not a
+## graphical parameter
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in box(...): "whixh" is not a graphical parameter
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): "whixh" is not a graphical parameter
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in plot.window(...): "whixh" is not a graphical parameter
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in plot.xy(xy, type, ...): "whixh" is not a graphical parameter
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in axis(side = side, at = at, labels = labels, ...): "whixh" is not a
+## graphical parameter
+
+## Warning in axis(side = side, at = at, labels = labels, ...): "whixh" is not a
+## graphical parameter
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in box(...): "whixh" is not a graphical parameter
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): "whixh" is not a graphical parameter
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in plot.xy(xy.coords(x, y), type = type, ...): "whixh" is not a
+## graphical parameter
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in plot.window(...): "whixh" is not a graphical parameter
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in plot.xy(xy, type, ...): "whixh" is not a graphical parameter
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in axis(side = side, at = at, labels = labels, ...): "whixh" is not a
+## graphical parameter
+
+## Warning in axis(side = side, at = at, labels = labels, ...): "whixh" is not a
+## graphical parameter
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in box(...): "whixh" is not a graphical parameter
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): "whixh" is not a graphical parameter
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in plot.xy(xy.coords(x, y), type = type, ...): "whixh" is not a
+## graphical parameter
+\end{verbatim}
+
+\includegraphics{Final-Project_files/figure-latex/unnamed-chunk-5-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{summary}\NormalTok{(model2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = dat[, 2] ~ time(dat) + time(dat) * Afterww2 + time(dat) * 
+##     IndustryRev, data = dat)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.32823 -0.09304  0.00055  0.06970  0.36771 
+## 
+## Coefficients:
+##                         Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)             2.551782   2.306113   1.107    0.270    
+## time(dat)              -0.001553   0.001230  -1.262    0.209    
+## Afterww2               -4.543077   3.029908  -1.499    0.136    
+## IndustryRev           -25.753919   3.603931  -7.146 2.60e-11 ***
+## time(dat):Afterww2      0.002170   0.001568   1.383    0.168    
+## time(dat):IndustryRev   0.013481   0.001895   7.115 3.08e-11 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.1255 on 168 degrees of freedom
+## Multiple R-squared:  0.8936, Adjusted R-squared:  0.8904 
+## F-statistic: 282.1 on 5 and 168 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(}\FunctionTok{resid}\NormalTok{(model2))}
+
+\FunctionTok{acf}\NormalTok{(}\FunctionTok{resid}\NormalTok{(model2))}
+\FunctionTok{pacf}\NormalTok{(}\FunctionTok{resid}\NormalTok{(model2))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Final-Project_files/figure-latex/unnamed-chunk-5-3.pdf}
+
+ACF tails off or cuts off after lag 2. PACF cuts off after lag 1. I Will
+fit an arima(1,0,0) and arima(2,0,2) to see which fits better.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{model.matrix }\OtherTok{=} \FunctionTok{model.matrix}\NormalTok{(}\AttributeTok{object=} \SpecialCharTok{\textasciitilde{}} \FunctionTok{time}\NormalTok{(dat)}\SpecialCharTok{+}\FunctionTok{time}\NormalTok{(dat)}\SpecialCharTok{*}\NormalTok{Afterww2}\SpecialCharTok{+} \FunctionTok{time}\NormalTok{(dat)}\SpecialCharTok{*}\NormalTok{IndustryRev}\DecValTok{{-}1}\NormalTok{)}
+
+\NormalTok{model.ts }\OtherTok{\textless{}{-}} \FunctionTok{arima}\NormalTok{(}\AttributeTok{x =}\NormalTok{ dat[,}\DecValTok{2}\NormalTok{], }\AttributeTok{order =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{),  }\AttributeTok{xreg =}\NormalTok{ model.matrix, }\AttributeTok{method =} \StringTok{"ML"}\NormalTok{)}
+
+\FunctionTok{tsdiag}\NormalTok{(model.ts)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Final-Project_files/figure-latex/unnamed-chunk-6-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{acf}\NormalTok{(}\FunctionTok{resid}\NormalTok{(model.ts))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Final-Project_files/figure-latex/unnamed-chunk-6-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{pacf}\NormalTok{(}\FunctionTok{resid}\NormalTok{(model.ts))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Final-Project_files/figure-latex/unnamed-chunk-6-3.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{coeftest}\NormalTok{(model.ts)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## z test of coefficients:
+## 
+##                          Estimate  Std. Error z value  Pr(>|z|)    
+## ar1                     0.5561333   0.0801484  6.9388 3.955e-12 ***
+## intercept               4.0105058   3.9954799  1.0038 0.3154940    
+## time(dat)              -0.0023375   0.0021384 -1.0931 0.2743316    
+## Afterww2               -9.4970649   5.4416527 -1.7453 0.0809407 .  
+## IndustryRev           -22.2203007   6.4850219 -3.4264 0.0006116 ***
+## time(dat):Afterww2      0.0047519   0.0028103  1.6909 0.0908609 .  
+## time(dat):IndustryRev   0.0116694   0.0034080  3.4241 0.0006168 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#model.matrix = model.matrix(object= \textasciitilde{} time(tmp)+time(tmp)*Afterww2+ time(tmp)*IndustryRev{-}1)}
+
+
+
+
+\NormalTok{model.matrix }\OtherTok{=} \FunctionTok{model.matrix}\NormalTok{(}\AttributeTok{object=} \SpecialCharTok{\textasciitilde{}} \FunctionTok{time}\NormalTok{(dat)}\SpecialCharTok{+}\FunctionTok{time}\NormalTok{(dat)}\SpecialCharTok{*}\NormalTok{Afterww2}\SpecialCharTok{+} \FunctionTok{time}\NormalTok{(dat)}\SpecialCharTok{*}\NormalTok{IndustryRev }\SpecialCharTok{+}\NormalTok{ I1976}\SpecialCharTok{*}\FunctionTok{time}\NormalTok{(dat) }\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{)}
+
+\NormalTok{model.ts }\OtherTok{\textless{}{-}} \FunctionTok{arima}\NormalTok{(}\AttributeTok{x =}\NormalTok{ dat[,}\DecValTok{2}\NormalTok{], }\AttributeTok{order =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{),  }\AttributeTok{xreg =}\NormalTok{ model.matrix, }\AttributeTok{method =} \StringTok{"ML"}\NormalTok{)}
+
+\FunctionTok{tsdiag}\NormalTok{(model.ts)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Final-Project_files/figure-latex/unnamed-chunk-7-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{acf}\NormalTok{(}\FunctionTok{resid}\NormalTok{(model.ts))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Final-Project_files/figure-latex/unnamed-chunk-7-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{pacf}\NormalTok{(}\FunctionTok{resid}\NormalTok{(model.ts))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Final-Project_files/figure-latex/unnamed-chunk-7-3.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{coeftest}\NormalTok{(model.ts)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## z test of coefficients:
+## 
+##                          Estimate  Std. Error z value  Pr(>|z|)    
+## ma1                     0.3577942   0.0699044  5.1183 3.082e-07 ***
+## intercept               2.6897378   2.3217003  1.1585    0.2467    
+## time(dat)              -0.0016276   0.0012435 -1.3090    0.1905    
+## Afterww2               23.4711228   5.7243811  4.1002 4.128e-05 ***
+## IndustryRev           -25.4781150   3.6554503 -6.9699 3.172e-12 ***
+## I1976                 -40.9890374   5.6387633 -7.2692 3.617e-13 ***
+## time(dat):Afterww2     -0.0121119   0.0029390 -4.1211 3.770e-05 ***
+## time(dat):IndustryRev   0.0133418   0.0019239  6.9347 4.072e-12 ***
+## time(dat):I1976         0.0207733   0.0028617  7.2591 3.896e-13 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#model.matrix = model.matrix(object= \textasciitilde{} time(tmp)+time(tmp)*Afterww2+ time(tmp)*IndustryRev{-}1)}
+
+\NormalTok{tmp }\OtherTok{\textless{}{-}}\NormalTok{ dat[,}\DecValTok{2}\NormalTok{][}\DecValTok{1}\SpecialCharTok{:}\DecValTok{163}\NormalTok{]}
+
+\NormalTok{Afterww2}\FloatTok{.2}\OtherTok{\textless{}{-}}\NormalTok{Afterww2[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{163}\NormalTok{]}
+\NormalTok{IndustryRev}\FloatTok{.2}\OtherTok{\textless{}{-}}\NormalTok{ IndustryRev[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{163}\NormalTok{]}
+\NormalTok{I1976}\FloatTok{.2} \OtherTok{\textless{}{-}}\NormalTok{ I1976[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{163}\NormalTok{]}
+\NormalTok{model.matrix}\FloatTok{.2} \OtherTok{=} \FunctionTok{model.matrix}\NormalTok{(}\AttributeTok{object=} \SpecialCharTok{\textasciitilde{}} \FunctionTok{time}\NormalTok{(tmp)}\SpecialCharTok{+}\FunctionTok{time}\NormalTok{(tmp)}\SpecialCharTok{*}\NormalTok{Afterww2}\FloatTok{.2}\SpecialCharTok{+} \FunctionTok{time}\NormalTok{(tmp)}\SpecialCharTok{*}\NormalTok{IndustryRev}\FloatTok{.2}\SpecialCharTok{+} \FunctionTok{time}\NormalTok{(tmp)}\SpecialCharTok{*}\NormalTok{I1976}\FloatTok{.2} \SpecialCharTok{{-}}\DecValTok{1}\NormalTok{)}
+
+\NormalTok{model.ts}\FloatTok{.2} \OtherTok{\textless{}{-}} \FunctionTok{arima}\NormalTok{(}\AttributeTok{x =}\NormalTok{ tmp, }\AttributeTok{order =} \FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{2}\NormalTok{),  }\AttributeTok{xreg =}\NormalTok{ model.matrix}\FloatTok{.2}\NormalTok{, }\AttributeTok{method =} \StringTok{"ML"}\NormalTok{)}
+
+\FunctionTok{tsdiag}\NormalTok{(model.ts}\FloatTok{.2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Final-Project_files/figure-latex/unnamed-chunk-8-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{acf}\NormalTok{(}\FunctionTok{resid}\NormalTok{(model.ts}\FloatTok{.2}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Final-Project_files/figure-latex/unnamed-chunk-8-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#pacf(resid(model.ts.2))}
+
+\CommentTok{\#coeftest(model.ts.2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fitted\_values }\OtherTok{\textless{}{-}} \FunctionTok{resid}\NormalTok{(model.ts) }\SpecialCharTok{+}\NormalTok{ dat[,}\DecValTok{2}\NormalTok{]}
+\FunctionTok{plot}\NormalTok{(dat[, }\DecValTok{2}\NormalTok{], }\AttributeTok{type =} \StringTok{"l"}\NormalTok{, }\AttributeTok{col =} \StringTok{"tomato"}\NormalTok{, }\AttributeTok{lwd =} \DecValTok{2}\NormalTok{, }\AttributeTok{main =} \StringTok{"Actual vs Fitted"}\NormalTok{, }\AttributeTok{ylab =} \StringTok{"Value"}\NormalTok{)}
+\FunctionTok{lines}\NormalTok{(fitted\_values, }\AttributeTok{col =} \StringTok{"blue"}\NormalTok{, }\AttributeTok{lwd =} \DecValTok{2}\NormalTok{)}
+\FunctionTok{legend}\NormalTok{(}\StringTok{"topright"}\NormalTok{, }\AttributeTok{legend =} \FunctionTok{c}\NormalTok{(}\StringTok{"Actual"}\NormalTok{, }\StringTok{"Fitted"}\NormalTok{), }\AttributeTok{col =} \FunctionTok{c}\NormalTok{(}\StringTok{"tomato"}\NormalTok{, }\StringTok{"blue"}\NormalTok{), }\AttributeTok{lty =} \DecValTok{1}\NormalTok{, }\AttributeTok{lwd =} \DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Final-Project_files/figure-latex/unnamed-chunk-9-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(dat[,}\DecValTok{2}\NormalTok{])}
+\FunctionTok{abline}\NormalTok{(}\AttributeTok{v=}\DecValTok{1900}\NormalTok{)}
+\FunctionTok{abline}\NormalTok{(}\AttributeTok{v =} \DecValTok{1945}\NormalTok{)}
+\FunctionTok{abline}\NormalTok{(}\AttributeTok{v =} \DecValTok{1976}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Final-Project_files/figure-latex/unnamed-chunk-10-1.pdf}
+
+\hypertarget{usuing-c02-to-predict}{%
+\section{usuing c02 to predict}\label{usuing-c02-to-predict}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{prewhite }\OtherTok{\textless{}{-}} \FunctionTok{Arima}\NormalTok{(dat[,}\DecValTok{1}\NormalTok{], }\AttributeTok{model =}\NormalTok{ model.ts, }\AttributeTok{xreg =}\NormalTok{ model.matrix)}
+
+
+\FunctionTok{lag2.plot}\NormalTok{(}\FunctionTok{resid}\NormalTok{(prewhite), }\FunctionTok{resid}\NormalTok{(model.ts),}\AttributeTok{max.lag =} \DecValTok{20}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Final-Project_files/figure-latex/unnamed-chunk-11-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ccf2}\NormalTok{(}\FunctionTok{resid}\NormalTok{(prewhite), }\FunctionTok{resid}\NormalTok{(model.ts))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Final-Project_files/figure-latex/unnamed-chunk-11-2.pdf}
+
+Everything from c02 is captured in our model for tempature.
+
+\hypertarget{refs}{}
+\begin{CSLReferences}{1}{0}
+\leavevmode\vadjust pre{\hypertarget{ref-ritchie_2023_co}{}}%
+Ritchie, Hannah, Pablo Rosado, and Max Roser. 2023. {``CO₂ and
+Greenhouse Gas Emissions.''} \emph{Our World in Data}.
+\url{https://ourworldindata.org/co2-and-greenhouse-gas-emissions}.
+
+\end{CSLReferences}
+
+\end{document}

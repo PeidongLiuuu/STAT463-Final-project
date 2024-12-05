@@ -1,8 +1,9 @@
 ---
 title: "Stat 463 Final Project"
-author: "Gustav Vu"
+author: "Gustav Vu and Peidong Liu"
 date: "2024-11-12"
 output: pdf_document
+bibliography: My first project.bib
 ---
 
 ```{r setup, include=FALSE}
@@ -12,28 +13,28 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 Load Libraries
-```{r}
+```{r,include=FALSE,echo=FALSE}
 library(TSA)
 library(forecast)
 library(astsa)
 library(dplyr)
 library(rugarch)
 library(tseries)
+library(lmtest)
+library(jsonlite)
+
 ```
 
 
 Load Data
 
 ```{r}
-library(jsonlite)
 
 # Fetch the data
 co2Data <- read.csv("https://ourworldindata.org/grapher/annual-co2-emissions-per-country.csv?v=1&csvType=filtered&useColumnShortNames=false&country=~OWID_WRL")
 
-# Fetch the metadata
-metadata <- fromJSON("https://ourworldindata.org/grapher/annual-co2-emissions-per-country.metadata.json?v=1&csvType=filtered&useColumnShortNames=false&country=~OWID_WRL")
 
-YearlyTemp <- read.csv("C:/Users/Gustav/Desktop/Stat 463/Final Proj/Yearly.csv")
+YearlyTemp <- read.csv("Yearly.csv")
 ```
 
 
@@ -57,6 +58,33 @@ temp_TS <- ts(temp_TS$Mean,
 dat <- ts.intersect(c02_TS, temp_TS)
 ```
 
+# Introduction
+For decades, the scientific community, policymakers, and global organizations have been grappling with the pressing issue of global warming, aiming to identify, develop, and implement the most effective strategies to mitigate its effects. One of the most critical steps in addressing this challenge is to thoroughly investigate its underlying causes, particularly the factors contributing to the increased concentration of carbon dioxide ($co_2$) in the atmosphere. As a primary greenhouse gas, $co_2$ plays a pivotal role in the intensification of the greenhouse effect, which has directly and indirectly led to a steady rise in global average temperatures. Understanding the historical trends and sources of $co_2$ emissions is crucial to comprehending the broader dynamics of climate change.
+
+
+This research specifically focuses on analyzing the significant boom in $co_2$ emissions that occurred during the Second Industrial Revolution, a period marked by rapid industrialization, technological advancements, and fossil fuel exploitation. By evaluating the socio-economic activities and technological developments of this transformative era, we aim to uncover the extent to which these factors contributed to the expansion of greenhouse gas levels and how they set the stage for the modern challenges of global warming. Through this analysis, we hope to provide insights into historical emission trends and their implications for current and future efforts to combat climate change.
+
+
+
+# Background
+
+### Global warming common issue 
+
+
+The Intergovernmental Panel on Climate Change (IPCC) issued a report in 1990 utilizing global mean near surface temperature which raised concern on the rate of increasing. [5]. This concern raised the question of further research on greenhouse effect of the
+
+
+
+Anthropological contribution on the emission of carbon dioxide that mainly draws from the effect of human activity [3] on a large scale acts as the main motive of the extreme spur especially after the second industrial revolution era.[2] Predominantly starts from western europe and north america where both regions exceeded 10 ton per capita as from the region report [@ritchie_2023_co]. A combination of boost in different industries which is facilitated by the second industrial revolution including chemical and transportation domain [4] after the mid 1880s followed by the expansion boom leads to the official start of boosting the aggregate global carbon dioxide emission. This major event placed a major factor on the $co_2$ emission which reflected on the overall data trend in terms of human intervention. 
+
+
+# Method
+
+In this study, we determine the effect of $co_2$ on temperature and compare the trend found through constructing a time series model for forecasting and the Arch-Garch method for taking care of the variance change aspect as time progresses. We use linear regression and Auto-Aggressive-Moving-Average(ARIMA) models for stationary and stochastic respectively. The model takes in consideration the data behavior change due to real world events. 
+
+
+
+
 
 ```{r}
 plot(dat[,1])
@@ -69,7 +97,7 @@ acf2(diff(log(dat[,1])))
 
 # Model Deterministic Part.
 
-Looking at our plot It seems as if events occurred around 1950, and 1900 start of second industrial revolution and end of ww2.
+Looking at our plot It seems as if events occurred around 1950, and 1900 start of second industrial revolution and end of World War II.
 
 ```{r}
 plot(dat[,2])
@@ -172,12 +200,6 @@ ccf2(resid(prewhite), resid(model.ts))
 Everything from c02 is captured in our model for tempature.
 
 
-
-## Pre whitening with arch-garch model
-```{r}
-model.ts2 <- arima(x = dat[,1], order = c(0,0,1),  xreg = model.matrix, method = "ML")
-summary(model)
-```
 
 
 
