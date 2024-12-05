@@ -1,0 +1,186 @@
+---
+title: "Stat 463 Final Project"
+author: "Gustav Vu"
+date: "2024-11-12"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+Load Libraries
+```{r}
+library(TSA)
+library(forecast)
+library(astsa)
+library(dplyr)
+library(rugarch)
+library(tseries)
+```
+
+
+Load Data
+
+```{r}
+library(jsonlite)
+
+# Fetch the data
+co2Data <- read.csv("https://ourworldindata.org/grapher/annual-co2-emissions-per-country.csv?v=1&csvType=filtered&useColumnShortNames=false&country=~OWID_WRL")
+
+# Fetch the metadata
+metadata <- fromJSON("https://ourworldindata.org/grapher/annual-co2-emissions-per-country.metadata.json?v=1&csvType=filtered&useColumnShortNames=false&country=~OWID_WRL")
+
+YearlyTemp <- read.csv("C:/Users/Gustav/Desktop/Stat 463/Final Proj/Yearly.csv")
+```
+
+
+# Clean Data
+```{r}
+YearlyTemp <- YearlyTemp[YearlyTemp$Source == "gcag", ] # keep source constant.
+c02_TS <- co2Data[, c("Year", "Annual.CO..emissions")]
+c02_TS <- c02_TS[order(c02_TS$Year), ]
+c02_TS <- ts(c02_TS$Annual.CO..emissions, 
+                   start = min(c02_TS$Year), 
+                   end = max(c02_TS$Year), 
+                   frequency = 1)
+
+temp_TS <- YearlyTemp[, c("Year", "Mean")]
+temp_TS <- temp_TS[order(temp_TS$Year), ]
+temp_TS <- ts(temp_TS$Mean, 
+                   start = min(temp_TS$Year), 
+                   end = max(temp_TS$Year), 
+                   frequency = 1)
+
+dat <- ts.intersect(c02_TS, temp_TS)
+```
+
+
+```{r}
+plot(dat[,1])
+plot(dat[,2])
+
+acf2(diff(log(dat[,1])))
+```
+
+
+
+# Model Deterministic Part.
+
+Looking at our plot It seems as if events occurred around 1950, and 1900 start of second industrial revolution and end of ww2.
+
+```{r}
+plot(dat[,2])
+Afterww2 <- as.numeric(time(dat)>= 1945)
+IndustryRev <- as.numeric(time(dat)>= 1900)
+I1976 <- as.numeric(time(dat)>= 1976)
+
+model2 <- lm(dat[,2] ~ time(dat)+time(dat)*Afterww2+ time(dat)*IndustryRev, data = dat)
+#plot(model2)
+par(mfrow=c(2,2))
+plot(model2, whixh = 1:4)
+summary(model2)
+plot(resid(model2))
+
+acf(resid(model2))
+pacf(resid(model2))
+```
+
+ACF tails off or cuts off after lag 2. PACF cuts off after lag 1. I Will fit an arima(1,0,0) and arima(2,0,2) to see which fits better.
+
+```{r}
+model.matrix = model.matrix(object= ~ time(dat)+time(dat)*Afterww2+ time(dat)*IndustryRev-1)
+
+model.ts <- arima(x = dat[,2], order = c(1,0,0),  xreg = model.matrix, method = "ML")
+
+tsdiag(model.ts)
+
+acf(resid(model.ts))
+pacf(resid(model.ts))
+coeftest(model.ts)
+```
+
+```{r}
+#model.matrix = model.matrix(object= ~ time(tmp)+time(tmp)*Afterww2+ time(tmp)*IndustryRev-1)
+
+
+
+
+model.matrix = model.matrix(object= ~ time(dat)+time(dat)*Afterww2+ time(dat)*IndustryRev + I1976*time(dat) -1)
+
+model.ts <- arima(x = dat[,2], order = c(0,0,1),  xreg = model.matrix, method = "ML")
+
+tsdiag(model.ts)
+
+acf(resid(model.ts))
+pacf(resid(model.ts))
+
+coeftest(model.ts)
+```
+
+
+
+```{r}
+#model.matrix = model.matrix(object= ~ time(tmp)+time(tmp)*Afterww2+ time(tmp)*IndustryRev-1)
+
+tmp <- dat[,2][1:163]
+
+Afterww2.2<-Afterww2[1:163]
+IndustryRev.2<- IndustryRev[1:163]
+I1976.2 <- I1976[1:163]
+model.matrix.2 = model.matrix(object= ~ time(tmp)+time(tmp)*Afterww2.2+ time(tmp)*IndustryRev.2+ time(tmp)*I1976.2 -1)
+
+model.ts.2 <- arima(x = tmp, order = c(2,0,2),  xreg = model.matrix.2, method = "ML")
+
+tsdiag(model.ts.2)
+
+acf(resid(model.ts.2))
+#pacf(resid(model.ts.2))
+
+#coeftest(model.ts.2)
+```
+
+```{r}
+fitted_values <- resid(model.ts) + dat[,2]
+plot(dat[, 2], type = "l", col = "tomato", lwd = 2, main = "Actual vs Fitted", ylab = "Value")
+lines(fitted_values, col = "blue", lwd = 2)
+legend("topright", legend = c("Actual", "Fitted"), col = c("tomato", "blue"), lty = 1, lwd = 2)
+```
+
+```{r}
+plot(dat[,2])
+abline(v=1900)
+abline(v = 1945)
+abline(v = 1976)
+```
+
+
+
+# usuing c02 to predict
+```{r}
+
+prewhite <- Arima(dat[,1], model = model.ts, xreg = model.matrix)
+
+
+lag2.plot(resid(prewhite), resid(model.ts),max.lag = 20)
+
+ccf2(resid(prewhite), resid(model.ts))
+```
+
+Everything from c02 is captured in our model for tempature.
+
+
+
+## Pre whitening with arch-garch model
+```{r}
+model.ts2 <- arima(x = dat[,1], order = c(0,0,1),  xreg = model.matrix, method = "ML")
+summary(model)
+```
+
+
+
+
+
+
