@@ -2,18 +2,30 @@
 title: "Stat 463 Final Project"
 author: "Gustav Vu and Peidong Liu"
 date: "2024-11-12"
-output: pdf_document
+output: 
+  pdf_document:
+    latex_engine: xelatex
 bibliography: My first project.bib
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+
+
+# Setting Document Options ----
+knitr::opts_chunk$set(
+  echo = FALSE,
+  warning = FALSE,
+  message = FALSE,
+  fig.align = "center"
+)
+
 ```
 
 
 
-Load Libraries
-```{r,include=FALSE,echo=FALSE}
+
+```{r Load Libraries ,include=FALSE,echo=FALSE}
+
 library(TSA)
 library(forecast)
 library(astsa)
@@ -28,7 +40,10 @@ library(jsonlite)
 
 Load Data
 
-```{r}
+```{r Load Data}
+
+
+
 
 # Fetch the data
 co2Data <- read.csv("https://ourworldindata.org/grapher/annual-co2-emissions-per-country.csv?v=1&csvType=filtered&useColumnShortNames=false&country=~OWID_WRL")
@@ -199,7 +214,13 @@ ccf2(resid(prewhite), resid(model.ts))
 
 Everything from c02 is captured in our model for tempature.
 
-
+\newpage
+## Code Appendix
+```{r codeAppendix}
+#| ref.label = knitr::all_labels(),
+#| echo = TRUE,
+#| eval = FALSE
+```
 
 
 
