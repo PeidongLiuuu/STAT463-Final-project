@@ -107,9 +107,9 @@ In this study, we determine the effect of $co_2$ on temperature and compare the 
 
 
 
-```{r}
-#| fig.cap = "Outlier Dection",
-#| fig.subcap = c("Univariate outlier detection for Co-variate", "Univariate outlier detection for Response","Multivariate Boxplot Outlier Dection"),
+```{r,warning=FALSE,include=TRUE,echo=FALSE}
+#| fig.cap = "Intial Data Exploration",
+#| fig.subcap = c("Plot data of Gobal CO2 Emission", "Plot data of Gobal Temperature ","ACF and PACF of CO2 data"),
 #| fig.ncol = 2,
 #| out.width = "50%",
 #| fig.pos = "H",
@@ -119,7 +119,9 @@ In this study, we determine the effect of $co_2$ on temperature and compare the 
 plot(dat[,1])
 plot(dat[,2])
 
-acf2(diff(log(dat[,1])))
+par(mfrow = c(2,1))
+acf(diff(log(dat[,1])))
+pacf(diff(log(dat[,1])))
 ```
 
 
