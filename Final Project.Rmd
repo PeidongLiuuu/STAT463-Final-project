@@ -43,7 +43,6 @@ library(jsonlite)
 ```
 
 
-Load Data
 
 ```{r Load Data}
 
@@ -58,7 +57,7 @@ YearlyTemp <- read.csv("Yearly.csv")
 ```
 
 
-# Clean Data
+
 ```{r}
 YearlyTemp <- YearlyTemp[YearlyTemp$Source == "gcag", ] # keep source constant.
 c02_TS <- co2Data[, c("Year", "Annual.CO..emissions")]
@@ -88,14 +87,15 @@ This research specifically focuses on analyzing the significant boom in $co_2$ e
 
 # Background
 
-### Global warming common issue 
+
+The Intergovernmental Panel on Climate Change (IPCC) issued a report in 1990 utilizing global mean near surface temperature which raised concern on the rate of increasing. [@jring_2012_causes]. This concern raised the question of further research on greenhouse effect of the change in global temperatures. 
+
+This issue has largely driven by the significant increase in greenhouse gas emissions such as carbon dioxide, methane, and nitrous oxide, has far-reaching consequences for urban life and biodiversity. The accumulation of these gases intensifies the greenhouse effect, leading to rising global temperatures and more frequent extreme weather events, including heatwaves, severe storms, and flooding. In urban areas, this exacerbates challenges like the urban heat island effect, worsened air quality, and increased strain on infrastructure. Coastal cities are particularly vulnerable, facing rising sea levels and flooding that can displace populations and result in substantial economic losses. On a broader scale, global warming disrupts ecosystems, causing habitat loss, shifts in climate zones, and resource scarcity that threaten the survival of countless species. These disruptions highlight the critical need for reducing greenhouse gas emissions and adopting sustainable practices to address the growing impacts of global warming on both human systems and the environment.
+
+Anthropological contribution on the emission of carbon dioxide that mainly draws from the effect of human activity [@collins_2010_the] on a large scale acts as the main motive of the extreme spur especially after the second industrial revolution era.[@smith_2008_impact] Predominantly starts from western europe and north america where both regions exceeded 10 ton per capita as from the region report [@ritchie_2023_co]. A combination of boost in different industries which is facilitated by the second industrial revolution including chemical and transportation domain [@mokyr_1998_the] after the mid 1880s followed by the expansion boom leads to the official start of boosting the aggregate global carbon dioxide emission. This major event placed a major factor on the $co_2$ emission which reflected on the overall data trend in terms of human intervention. 
 
 
-The Intergovernmental Panel on Climate Change (IPCC) issued a report in 1990 utilizing global mean near surface temperature which raised concern on the rate of increasing. [5]. This concern raised the question of further research on greenhouse effect of the
 
-
-
-Anthropological contribution on the emission of carbon dioxide that mainly draws from the effect of human activity [3] on a large scale acts as the main motive of the extreme spur especially after the second industrial revolution era.[2] Predominantly starts from western europe and north america where both regions exceeded 10 ton per capita as from the region report [@ritchie_2023_co]. A combination of boost in different industries which is facilitated by the second industrial revolution including chemical and transportation domain [4] after the mid 1880s followed by the expansion boom leads to the official start of boosting the aggregate global carbon dioxide emission. This major event placed a major factor on the $co_2$ emission which reflected on the overall data trend in terms of human intervention. 
 
 
 
@@ -107,7 +107,7 @@ In this study, we determine the effect of $co_2$ on temperature and compare the 
 
 
 
-```{r,warning=FALSE,include=TRUE,echo=FALSE,message=FALSE,result = HIDE}
+```{r,warning=FALSE,include=TRUE,echo=FALSE,message=FALSE}
 #| fig.cap = "Intial Data Exploration",
 #| fig.subcap = c("Plot data of Gobal CO2 Emission", "Plot data of Gobal Temperature ","ACF and PACF of CO2 data"),
 #| fig.ncol = 2,
@@ -123,6 +123,10 @@ par(mfrow = c(2,1))
 acf(diff(log(dat[,1])))
 pacf(diff(log(dat[,1])))
 ```
+
+By looking at both Golbal CO2 emmision and Golbal tempureature, there are insight that we can observe from the plots. Both data are not display stationary feature which requires furthre data processing since, for time series data, stationary assumption needs to be met before modeling the data with either Move Average or Auto Regressive. 
+
+
 
 
 
