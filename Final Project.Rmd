@@ -1,5 +1,5 @@
 ---
-title: "Stat 463 Final Project"
+title: "Has the global temperature increased since the second industrial revolution?"
 author: "Gustav Vu and Peidong Liu"
 date: "2024-11-12"
 output: 
@@ -76,6 +76,10 @@ temp_TS <- ts(temp_TS$Mean,
 
 dat <- ts.intersect(c02_TS, temp_TS)
 ```
+
+
+
+
 
 # Introduction
 For decades, the scientific community, policymakers, and global organizations have been grappling with the pressing issue of global warming, aiming to identify, develop, and implement the most effective strategies to mitigate its effects. One of the most critical steps in addressing this challenge is to thoroughly investigate its underlying causes, particularly the factors contributing to the increased concentration of carbon dioxide ($co_2$) in the atmosphere. As a primary greenhouse gas, $co_2$ plays a pivotal role in the intensification of the greenhouse effect, which has directly and indirectly led to a steady rise in global average temperatures. Understanding the historical trends and sources of $co_2$ emissions is crucial to comprehending the broader dynamics of climate change.
