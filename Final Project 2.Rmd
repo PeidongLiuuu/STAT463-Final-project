@@ -1,0 +1,410 @@
+---
+title: "Stat 463 Final Project"
+author: "Gustav Vu and Peidong Liu"
+date: "2024-11-12"
+output: 
+  pdf_document:
+    latex_engine: xelatex
+urlcolor: blue
+geometry: left=1in,right=1in,top=1in,bottom=1in
+bibliography: My first project.bib
+header-includes:
+  - \usepackage{subfig}
+  - \usepackage{float}
+---
+
+```{r setup, include=FALSE}
+
+
+# Setting Document Options ----
+knitr::opts_chunk$set(
+  echo = FALSE,
+  warning = FALSE,
+  message = FALSE,
+  fig.align = "center"
+)
+
+```
+
+
+
+
+```{r Load Libraries ,include=FALSE,echo=FALSE}
+
+library(TSA)
+library(forecast)
+library(astsa)
+library(dplyr)
+library(rugarch)
+library(tseries)
+library(lmtest)
+library(jsonlite)
+library(kableExtra)
+library(ggplot2)
+
+
+```
+
+
+
+```{r Load Data}
+
+
+# Fetch the data
+co2Data <- read.csv("https://ourworldindata.org/grapher/annual-co2-emissions-per-country.csv?v=1&csvType=filtered&useColumnShortNames=false&country=~OWID_WRL")
+
+YearlyTemp <- read.csv("Yearly.csv")
+#YearlyTemp <- read.csv("Yearly.csv")
+```
+
+
+
+```{r}
+YearlyTemp <- YearlyTemp[YearlyTemp$Source == "gcag", ] # keep source constant.
+c02_TS <- co2Data[, c("Year", "Annual.CO..emissions")]
+c02_TS <- c02_TS[order(c02_TS$Year), ]
+c02_TS <- ts(c02_TS$Annual.CO..emissions, 
+                   start = min(c02_TS$Year), 
+                   end = max(c02_TS$Year), 
+                   frequency = 1)
+
+temp_TS <- YearlyTemp[, c("Year", "Mean")]
+temp_TS <- temp_TS[order(temp_TS$Year), ]
+temp_TS <- ts(temp_TS$Mean, 
+                   start = min(temp_TS$Year), 
+                   end = max(temp_TS$Year), 
+                   frequency = 1)
+
+dat <- ts.intersect(c02_TS, temp_TS)
+```
+
+
+# Abstrat
+
+This study investigates the historical and contemporary impacts of carbon dioxide (CO2) emissions on global temperature trends, with a focus on the transformative effects of the Second Industrial Revolution and World War II. Employing time series modeling techniques, including step functions and ARIMA models, the research explores key historical events contributing to CO2 emissions and their correlation with temperature changes. The analysis reveals significant behavior changes in temperature trends linked to industrialization milestones and post-war developments. However, findings suggest that while CO2 emissions play a critical role in global warming, incorporating CO2 data does not significantly enhance temperature modeling. These results emphasize the complexity of climate dynamics and the need for multifactorial approaches to understand and address global climate change.
+
+
+
+
+
+
+# Introduction
+For decades, the scientific community, policymakers, and global organizations have been grappling with the pressing issue of global warming, aiming to identify, develop, and implement the most effective strategies to mitigate its effects. One of the most critical steps in addressing this challenge is to thoroughly investigate its underlying causes, particularly the factors contributing to the increased concentration of carbon dioxide ($co_2$) in the atmosphere[@letcher_2019_1]. As a primary greenhouse gas, $co_2$ plays a pivotal role in the intensification of the greenhouse effect, which has directly and indirectly led to a steady rise in global average temperatures[@betts_2011_when]. Understanding the historical trends and sources of $co_2$ emissions is crucial to comprehending the broader dynamics of climate change.
+
+
+This research specifically focuses on analyzing the significant boom in $co_2$ emissions that occurred during the Second Industrial Revolution, a period marked by rapid industrialization, technological advancements, and fossil fuel exploitation. By evaluating the socio-economic activities and technological developments of this transformative era, we aim to uncover the extent to which these factors contributed to the expansion of greenhouse gas levels and how they set the stage for the modern challenges of global warming. Through this analysis, we hope to provide insights into historical emission trends and their implications for current and future efforts to combat climate change.
+
+
+
+# Background
+
+
+The Intergovernmental Panel on Climate Change (IPCC) issued a report in 1990 utilizing global mean near surface temperature which raised concern on the rate of increasing. [@jring_2012_causes]. This concern raised the question of further research on greenhouse effect of the change in global temperatures. 
+
+This issue has largely driven by the significant increase in greenhouse gas emissions such as carbon dioxide, methane, and nitrous oxide, has far-reaching consequences for urban life and biodiversity. The accumulation of these gases intensifies the greenhouse effect, leading to rising global temperatures and more frequent extreme weather events, including heatwaves, severe storms, and flooding. In urban areas, this exacerbates challenges like the urban heat island effect, worsened air quality, and increased strain on infrastructure. Coastal cities are particularly vulnerable, facing rising sea levels and flooding that can displace populations and result in substantial economic losses. On a broader scale, global warming disrupts ecosystems, causing habitat loss, shifts in climate zones, and resource scarcity that threaten the survival of countless species. These disruptions highlight the critical need for reducing greenhouse gas emissions and adopting sustainable practices to address the growing impacts of global warming on both human systems and the environment.
+
+Anthropological contribution on the emission of carbon dioxide that mainly draws from the effect of human activity [@collins_2010_the] on a large scale acts as the main motive of the extreme spur especially after the second industrial revolution era.[@smith_2008_impact] Predominantly starts from western europe and north america where both regions exceeded 10 ton per capita as from the region report [@ritchie_2023_co]. A combination of boost in different industries which is facilitated by the second industrial revolution including chemical and transportation domain [@mokyr_1998_the] after the mid 1880s followed by the expansion boom leads to the official start of boosting the aggregate global carbon dioxide emission. This major event placed a major factor on the $co_2$ emission which reflected on the overall data trend in terms of human intervention. 
+
+To address the skepticism about the necessity of $co_2$ data in modeling global temperature trends, it is important to critically examine the role $co_2$ plays as a predictor in time series analysis[@florides_2009_global]. While there is substantial evidence linking $co_2$ emissions to global temperature changes, determining the extent to which $co_2$ alone can explain the observed trends remains a complex challenge. This skepticism arises partly because global temperatures are influenced by a multitude of factors beyond $co_2$, such as natural climate variability (e.g., El Niño and La Niña events), solar radiation fluctuations, volcanic activity, and other greenhouse gases like methane and water vapor.
+
+Moreover, questions remain about the granularity and completeness of $co_2$ data. Temporal and spatial variations in $co_2$ measurements, the lag between emissions and their climatic effects, and the interplay with other environmental factors make it difficult to isolate its impact on temperature trends. In time series analysis, using $co_2$ data alone might fail to capture these complexities, leading to models that oversimplify the underlying mechanisms driving global temperature changes.
+
+
+# Method
+
+In this study, we determine the effect of $co_2$ on temperature and compare the trend found through constructing a time series model for forecasting and the Arch-Garch method for taking care of the variance change aspect as time progresses. We use linear regression and Auto-Aggressive-Moving-Average(ARIMA) models for stationary and stochastic respectively. The model takes in consideration the data behavior change due to real world events. 
+
+# Model Deterministic Part.
+
+Looking at our plot It seems as if events occurred around 1950, and 1900 start of second industrial revolution and end of World War II. There also seems to be a behavior change at around 1976 although it is unclear what may have caused this behavioral change. 
+
+- The Second Industrial Revolution
+  - The Second Industrial Revolution increased industrial activity and fossil fuel use.
+  - Burning coal and oil released large amounts of greenhouse gases (e.g., CO2), trapping heat in the atmosphere.
+  - Urbanization and deforestation reduced natural areas that absorb CO2, further contributing to warming.
+
+- World War II
+  - During World War II, industrial production and military activities emitted additional greenhouse gases.
+  - Destruction of natural landscapes and forests decreased the Earth's ability to absorb carbon.
+  - Post-war industrial expansion intensified greenhouse gas emissions, accelerating long-term warming.
+
+
+
+
+
+# Data Exploration
+
+```{r,warning=FALSE,include=TRUE,echo=FALSE,message=FALSE}
+#| fig.cap = "Intial Data Exploration",
+#| fig.subcap = c("Plot data of Gobal CO2 Emission", "Plot data of Gobal Temperature ","ACF and PACF of CO2 data"),
+#| fig.ncol = 2,
+#| out.width = "50%",
+#| fig.pos = "H",
+#| fig.show = "hold"
+
+
+plot(dat[,1])
+plot(dat[,2])
+
+par(mfrow = c(2,1))
+acf(diff(log(dat[,1])))
+pacf(diff(log(dat[,1])))
+```
+
+By looking at both Global CO2 emission and Golbal temperature, there are insight that we can observe from the plots. Both data are not display stationary feature which requires further data processing since, for time series data, stationary assumption needs to be met before modeling the data with either Move Average or Auto Regressive. 
+
+
+
+
+
+
+\newpage
+
+## Model Construction with Step Functions
+
+The Second Industrial Revolution and World War II increased greenhouse gas emissions, altered land use, and amplified global warming trends, setting the stage for the temperature changes observed in the 20th century.
+
+```{r}
+#| fig.cap = "Temperature Data with Behavior Change Segment",
+#| fig.height = 3,
+#| fig.pos = "H"
+
+
+
+#plot(dat[,2])
+#abline(v=1900)
+#abline(v = 1945)
+#abline(v = 1976)
+
+dat_df <- as.data.frame(dat)
+
+ggplot(dat_df, aes(x = 1:nrow(dat_df), y = temp_TS)) +
+  geom_line(color = "blue") +
+  labs(title = "Plot of Tempureture", x = "Time from 1850", y = "Temp") +
+  geom_vline(xintercept = c(50, 95, 126), linetype = "dashed", color = "red") +
+  theme_minimal()
+
+```
+
+
+
+
+
+
+```{r model construction with step functions}
+
+Afterww2 <- as.numeric(time(dat)>= 1945)
+IndustryRev <- as.numeric(time(dat)>= 1900)
+I1976 <- as.numeric(time(dat)>= 1976)
+
+model2 <- lm(dat[,2] ~ time(dat)+time(dat)*Afterww2+ time(dat)*IndustryRev + time(dat)*I1976, data = dat)
+model2_summary <- summary(model2)
+coefficients_df <- as.data.frame(model2_summary$coefficients)
+
+colnames(coefficients_df) <- c("Estimate", "Std. Error", "t value", "Pr(>|t|)")
+
+coefficients_df <- coefficients_df %>%
+  mutate(Significance = case_when(
+    `Pr(>|t|)` < 0.001 ~ "***",
+    `Pr(>|t|)` < 0.01 ~ "**",
+    `Pr(>|t|)` < 0.05 ~ "*",
+    `Pr(>|t|)` < 0.1 ~ ".",
+    TRUE ~ ""
+  ))
+
+coefficients_df %>%
+  kbl(
+    caption = "Regression with Step Function Model Results",
+    digits = 4,
+    align = "c"
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    full_width = FALSE,
+    font_size = 9 # Adjust font size here
+  ) %>%
+  column_spec(1, bold = TRUE) %>% # Make the first column bold for emphasis
+  add_header_above(c(" " = 1, "Coefficients" = 4, " " = 1)) %>%
+  kableExtra::kable_styling(latex_options = c("scale_down"))
+
+
+```
+
+
+
+
+
+
+```{r stepfunction regression model evaluation}
+#| fig.cap = "Model Evaluation",
+#| fig.subcap = c("Residual analysis", "ACF and PACF of model residual"),
+#| fig.ncol = 2,
+#| out.width = "50%",
+#| fig.pos = "H",
+#| fig.show = "hold"
+
+par(mfrow=c(2,2))
+plot(model2, whixh = 1:4)
+
+
+par(mfrow = c(2,1))
+acf(resid(model2))
+pacf(resid(model2))
+```
+
+
+
+
+we first approach with step function for regression to accommodate the behavior change for the data and we will construct Arima model base on the model results. We have the results display above in Table 1 with all th coefficient significant.
+
+
+
+
+\newpage
+
+# Fit Arima (1,0,0) Model
+
+ACF tails off or cuts off after lag 2. PACF cuts off after lag 1. I Will fit an arima(1,0,0) and arima(2,0,2) to see which fits better.
+
+
+```{r}
+
+model.matrix = model.matrix(object= ~ time(dat)+time(dat)*Afterww2+ time(dat)*IndustryRev+time(dat)*I1976-1)
+
+model.ts <- arima(x = dat[,2], order = c(1,0,0),  xreg = model.matrix, method = "ML")
+coeftest(model.ts)
+```
+
+
+```{r}
+#| fig.cap = "Residual Diag Arima(1,0,1)",
+#| fig.subcap = c("residual", "acf and pacf of Arima(1,0,0) residual"),
+#| fig.ncol = 2,
+#| out.width = "50%",
+#| fig.pos = "H",
+#| fig.show = "hold"
+
+
+
+tsdiag(model.ts)
+par(mfrow = c(2,1))
+acf(resid(model.ts))
+pacf(resid(model.ts))
+```
+
+
+
+
+
+
+
+
+\newpage
+# Fit Arima (2,0,2) Model
+
+
+```{r}
+#| fig.cap = "Residual Diag Arima(2,0,2)",
+#| fig.subcap = c("residual", "acf and pacf of Arima(2,0,2) residual"),
+#| fig.ncol = 2,
+#| out.width = "50%",
+#| fig.pos = "H",
+#| fig.show = "hold"
+
+
+#model.matrix = model.matrix(object= ~ time(tmp)+time(tmp)*Afterww2+ time(tmp)*IndustryRev-1)
+
+#tmp <- dat[,2][1:163]
+
+Afterww2.2<-Afterww2[1:163]
+IndustryRev.2<- IndustryRev[1:163]
+I1976.2 <- I1976[1:163]
+model.matrix.2 = model.matrix(object= ~ time(dat)+time(dat)*Afterww2+ time(dat)*IndustryRev+ time(dat)*I1976 -1)
+
+model.ts.2 <- arima(x = dat[,2], order = c(2,0,2),  xreg = model.matrix.2, method = "ML")
+
+tsdiag(model.ts.2)
+par(mfrow = c(2,1))
+acf(resid(model.ts.2))
+pacf(resid(model.ts.2))
+#pacf(resid(model.ts.2))
+
+
+```
+
+
+```{r}
+
+coeftest(model.ts.2)
+```
+
+
+
+
+
+
+
+
+# Model Comparsion and results
+
+
+The best fit was found from the ARIMA(2,2) fit. It had the least auto correlation and the best Ljung-Box P values.
+
+```{r}
+#| fig.cap = "Actual vs. Fitted plot with ARIMA(2,2)",
+#| fig.height = 3,
+#| fig.pos = "H"
+
+
+fitted_values <- resid(model.ts.2) + dat[,2]
+plot(dat[, 2], type = "l", col = "tomato", lwd = 2, main = "Actual vs Fitted", ylab = "Value")
+lines(fitted_values, col = "blue", lwd = 2)
+legend("topright", legend = c("Actual", "Fitted"), col = c("tomato", "blue"), lty = 1, lwd = 2)
+```
+
+# Using c02 to predict
+```{r}
+#| fig.cap = "Correlation betweel lags",
+#| fig.height = 4,
+#| fig.pos = "H"
+
+prewhite <- Arima(dat[,1], model = model.ts.2, xreg = model.matrix)
+
+
+lag2.plot(resid(prewhite), resid(model.ts),max.lag = 20)
+
+
+
+```
+
+```{r}
+#| fig.cap = "CCF Plot of Prewhiting Residual",
+#| fig.height = 3,
+#| fig.pos = "H"
+
+
+ccf2(resid(prewhite), resid(model.ts))
+```
+
+After removing all autocorrelation from the global temperature data, step functions were fitted to the significant dates alongside an ARIMA(2,0,2) model. The global CO2 output data was prewhitened using the same transformation. Analysis revealed no significant correlations at any lag. While this does not rule out the possibility of a causal relationship, it suggests that CO2 data is not necessary for modeling global temperatures. In other words, including CO2 data in the global temperature model does not improve its fit.
+
+# Conclusion 
+
+It was determined that we were successfully able to model yearly global temperatures. An ARIMA(2,0,2) model was fit with step functions to indicate significant dates have past. Th model removed all autocorrelation from the data and global c02 output data was not needed to model temperatures. This does not indicate that there is no cause and effect but that c02 data is not needed to model global temperatures.
+
+\newpage
+## Code Appendix
+```{r codeAppendix}
+#| ref.label = knitr::all_labels(),
+#| echo = TRUE,
+#| eval = FALSE
+```
+
+
+\newpage
+## References
+
+
+
+
+
